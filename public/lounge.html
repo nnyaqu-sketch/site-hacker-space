@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon du Club</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/lounge.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">
+                <h1>Site du Club</h1>
+                <span class="tag">Communauté • Événements • Chat</span>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-btn">Accueil</a>
+                <a href="/chat.html" class="nav-btn">Chat</a>
+                <a href="/checklist.html" class="nav-btn">Listes</a>
+                <a href="/lounge.html" class="nav-btn active">Salon</a>
+                <a href="/messages.html" class="nav-btn">Messages</a>
+                <a href="/profile.html" class="nav-btn">Profil</a>
+                <a href="/admin.html" class="nav-btn admin-only">Admin</a>
+                <a href="/creator.html" class="nav-btn creator-only">Créateur</a>
+            </nav>
+            <div id="user-status" class="user-status"></div>
+        </header>
+
+        <main class="lounge-page">
+            <div class="lounge-header">
+                <div class="lounge-title">
+                    <i data-lucide="megaphone" class="title-icon"></i>
+                    <div>
+                        <h1>Salon d'Annonces</h1>
+                        <p class="subtitle">Annonces officielles et informations importantes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lounge-grid">
+                <!-- Admin Controls Panel -->
+                <section id="admin-controls" class="panel admin-panel" style="display:none">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="plus-circle" class="header-icon"></i>
+                            <h2>Nouvelle Annonce</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i data-lucide="type" class="label-icon"></i>
+                                Titre de l'annonce
+                            </label>
+                            <input id="announcement-title" placeholder="Ex: Événement spécial ce weekend" class="form-input">
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i data-lucide="file-text" class="label-icon"></i>
+                                Contenu
+                            </label>
+                            <textarea id="announcement-content" placeholder="Détails de l'annonce..." class="form-textarea"></textarea>
+                        </div>
+                        <button id="post-announcement" class="btn-primary full-width">
+                            <i data-lucide="send" class="btn-icon"></i>
+                            Publier l'Annonce
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Announcements Display -->
+                <section class="panel announcements-panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="bell" class="header-icon"></i>
+                            <h2>Annonces Récentes</h2>
+                        </div>
+                        <span class="badge-info">
+                            <i data-lucide="info" class="badge-icon"></i>
+                            Officiel
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div id="announcements" class="announcements"></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/shared.js"></script>
+    <script src="/js/lounge.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Site du Club</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">
+                <h1>Site du Club</h1>
+                <span class="tag">Communauté • Événements • Chat</span>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-btn">Accueil</a>
+            </nav>
+        </header>
+
+        <main class="auth-page">
+            <div class="auth-container">
+                <section class="auth-box">
+                    <h2>Inscription</h2>
+                    <div class="auth-form">
+                        <div class="form-group">
+                            <label for="username">Nom d'utilisateur</label>
+                            <input id="username" type="text" placeholder="Choisissez un nom d'utilisateur (min. 3 caractères)">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mot de passe</label>
+                            <input id="password" type="password" placeholder="Choisissez un mot de passe (min. 6 caractères)">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-code">Code d'inscription</label>
+                            <input id="register-code" type="text" placeholder="Entrez votre code d'inscription">
+                            <small class="help-text">Contactez un administrateur pour obtenir un code</small>
+                        </div>
+                        <div class="error-message" id="error-message"></div>
+                        <button id="register-btn" class="primary full-width">S'inscrire</button>
+                    </div>
+                    <div class="auth-links">
+                        <p>Déjà inscrit ? <a href="/login.html">Se connecter</a></p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerBtn = document.getElementById('register-btn');
+            const errorMessage = document.getElementById('error-message');
+
+            registerBtn.addEventListener('click', async () => {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const code = document.getElementById('register-code').value;
+
+                try {
+                    const r = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify({ username, password, code })
+                    });
+                    const data = await r.json();
+                    
+                    if (data.success) {
+                        alert('Inscription réussie! Vous pouvez maintenant vous connecter.');
+                        window.location.href = '/login.html';
+                    } else {
+                        errorMessage.textContent = data.error || 'Erreur d\'inscription';
+                        errorMessage.style.display = 'block';
+                    }
+                } catch (err) {
+                    errorMessage.textContent = 'Erreur de connexion au serveur';
+                    errorMessage.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

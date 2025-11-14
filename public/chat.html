@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat du Club</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/chat.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">
+                <h1>Site du Club</h1>
+                <span class="tag">Communauté • Événements • Chat</span>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-btn">Accueil</a>
+                <a href="/chat.html" class="nav-btn active">Chat</a>
+                <a href="/checklist.html" class="nav-btn">Listes</a>
+                <a href="/lounge.html" class="nav-btn">Salon</a>
+                <a href="/messages.html" class="nav-btn">Messages</a>
+                <a href="/profile.html" class="nav-btn">Profil</a>
+                <a href="/admin.html" class="nav-btn admin-only">Admin</a>
+                <a href="/creator.html" class="nav-btn creator-only">Créateur</a>
+            </nav>
+            <div id="user-status" class="user-status"></div>
+        </header>
+
+        <main class="chat-page">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i data-lucide="message-circle" class="title-icon"></i>
+                    <div>
+                        <h1>Chat Public</h1>
+                        <p class="subtitle">Discutez avec tous les membres du club</p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="panel chat-panel">
+                <div class="panel-header">
+                    <div class="header-title">
+                        <i data-lucide="messages-square" class="header-icon"></i>
+                        <h2>Conversation</h2>
+                    </div>
+                    <span class="badge-info">
+                        <i data-lucide="clock" class="badge-icon"></i>
+                        Messages effacés après 24h
+                    </span>
+                </div>
+                
+                <div class="panel-body chat-container">
+                    <div id="messages" class="chat-box"></div>
+                    
+                    <div class="msg-input-row">
+                        <textarea id="msg-input" maxlength="300" 
+                                placeholder="Écrivez un message..."></textarea>
+                        <div class="msg-controls">
+                            <span id="char-count" class="char-count">0/300</span>
+                            <button id="send-btn" class="send-btn">
+                                <i data-lucide="send" class="btn-icon"></i>
+                                Envoyer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/shared.js"></script>
+    <script src="/js/chat.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

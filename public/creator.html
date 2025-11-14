@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Créateur - Site du Club</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/creator.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="topbar">
+            <div class="brand">
+                <h1>Site du Club</h1>
+                <span class="tag">Communauté • Événements • Chat</span>
+            </div>
+            <nav class="nav">
+                <a href="/" class="nav-btn">Accueil</a>
+                <a href="/chat.html" class="nav-btn">Chat</a>
+                <a href="/checklist.html" class="nav-btn">Listes</a>
+                <a href="/lounge.html" class="nav-btn">Salon</a>
+                <a href="/messages.html" class="nav-btn">Messages</a>
+                <a href="/profile.html" class="nav-btn">Profil</a>
+                <a href="/admin.html" class="nav-btn admin-only">Admin</a>
+                <a href="/creator.html" class="nav-btn creator-only active">Créateur</a>
+            </nav>
+            <div id="user-status" class="user-status"></div>
+        </header>
+
+        <main class="creator-page">
+            <div class="creator-header">
+                <div class="creator-title">
+                    <i data-lucide="crown" class="title-icon"></i>
+                    <div>
+                        <h1>Tableau de Bord Créateur</h1>
+                        <p class="subtitle">Contrôle total du système et des utilisateurs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="creator-grid">
+                <!-- Statistics Overview -->
+                <section class="panel stats-panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="bar-chart-3" class="header-icon"></i>
+                            <h2>Statistiques en Direct</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="stats" class="stats-grid"></div>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="zap" class="header-icon"></i>
+                            <h2>Actions Rapides</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <button id="club-open-btn" class="action-card primary-action full-width">
+                            <i data-lucide="radio" class="action-icon"></i>
+                            <div class="action-content">
+                                <h3>Annoncer l'Ouverture du Club</h3>
+                                <p>Envoyer une notification Discord à tous les membres</p>
+                            </div>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Admin Code Generation -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="shield-check" class="header-icon"></i>
+                            <h2>Gestion des Administrateurs</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i data-lucide="key" class="label-icon"></i>
+                                Code d'inscription administrateur
+                            </label>
+                            <div class="input-group">
+                                <input id="new-admin-code" type="text" readonly placeholder="Cliquez pour générer un code" class="form-input">
+                                <button id="generate-admin" class="btn-primary">
+                                    <i data-lucide="plus-circle" class="btn-icon"></i>
+                                    Générer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- User Management -->
+                <section class="panel user-panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="users-2" class="header-icon"></i>
+                            <h2>Utilisateurs du Système</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="user-list" class="user-list"></div>
+                    </div>
+                </section>
+
+                <!-- System Configuration -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="settings" class="header-icon"></i>
+                            <h2>Configuration Système</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i data-lucide="message-circle" class="label-icon"></i>
+                                Message système
+                            </label>
+                            <textarea id="system-message" placeholder="Message à afficher aux utilisateurs" class="form-textarea"></textarea>
+                            <div class="form-row">
+                                <label class="checkbox-label"><input type="checkbox" id="system-private"> Message privé</label>
+                                <select id="system-target" class="form-input">
+                                    <option value="">-- Destinataire (tous) --</option>
+                                </select>
+                            </div>
+                            <button id="set-message" class="btn-primary full-width">
+                                <i data-lucide="save" class="btn-icon"></i>
+                                Enregistrer le Message
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Maintenance Tools -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="wrench" class="header-icon"></i>
+                            <h2>Outils de Maintenance</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="maintenance-grid">
+                            <button id="clear-chat" class="maintenance-btn danger">
+                                <i data-lucide="message-square-x" class="maintenance-icon"></i>
+                                <div class="maintenance-content">
+                                    <h4>Nettoyer le Chat</h4>
+                                    <p>Supprimer tout l'historique</p>
+                                </div>
+                            </button>
+                            <button id="clear-announcements" class="maintenance-btn danger">
+                                <i data-lucide="bell-off" class="maintenance-icon"></i>
+                                <div class="maintenance-content">
+                                    <h4>Nettoyer les Annonces</h4>
+                                    <p>Supprimer toutes les annonces</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/shared.js"></script>
+    <script src="/js/creator.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
