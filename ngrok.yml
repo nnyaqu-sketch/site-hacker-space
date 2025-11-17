@@ -1,0 +1,7 @@
+authtoken: 33bgqlSkVXu50dn7wtMFnn3f46S_nVo5m3fBHgLQditQdKyh
+region: eu
+tunnels:
+  club-site:
+    proto: http
+    addr: 3001
+    # hostname: mysite.example.com  # reserved for paid accounts

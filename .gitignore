@@ -1,0 +1,4 @@
+node_modules/
+club.db
+.env
+.DS_Store
