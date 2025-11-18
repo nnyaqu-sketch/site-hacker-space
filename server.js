@@ -143,6 +143,21 @@ async function initDb() {
       FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
   `);
+  
+  // Attendance table for tracking member presence
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS attendance (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      username TEXT,
+      confirmed_by INTEGER,
+      confirmed_by_username TEXT,
+      timestamp INTEGER,
+      date TEXT,
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY(confirmed_by) REFERENCES users(id) ON DELETE SET NULL
+    );
+  `);
 }
 
 // Helper: require auth
@@ -238,6 +253,14 @@ app.post('/api/logout', (req, res) => {
 // Creator endpoints
 function requireCreator(req, res, next) {
   if (req.session.role !== 'creator') return res.status(403).json({ error: 'creator only' });
+  next();
+}
+
+// Admin/Creator endpoints - only admin or creator can access
+function requireAdminOrCreator(req, res, next) {
+  if (!(req.session.role === 'admin' || req.session.role === 'creator')) {
+    return res.status(403).json({ error: 'admin or creator required' });
+  }
   next();
 }
 
@@ -401,6 +424,65 @@ app.get('/api/users', requireAuth, async (req, res) => {
   const users = await db.all('SELECT id, username, role FROM users WHERE id != ?', [req.session.userId]);
   res.json(users);
 });
+
+// Attendance endpoints (admin/creator only)
+app.post('/api/attendance/mark', requireAdminOrCreator, async (req, res) => {
+  const { userId } = req.body;
+  if (!userId) return res.status(400).json({ error: 'userId required' });
+  
+  const user = await db.get('SELECT id, username FROM users WHERE id = ?', [userId]);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  
+  const ts = Date.now();
+  const date = new Date(ts).toISOString().split('T')[0]; // YYYY-MM-DD format
+  
+  const result = await db.run(
+    `INSERT INTO attendance (user_id, username, confirmed_by, confirmed_by_username, timestamp, date)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [userId, user.username, req.session.userId, req.session.username, ts, date]
+  );
+  
+  const record = await db.get('SELECT * FROM attendance WHERE id = ?', [result.lastID]);
+  io.emit('attendance-marked', record);
+  res.json(record);
+});
+
+app.get('/api/attendance/today', requireAdminOrCreator, async (req, res) => {
+  const today = new Date().toISOString().split('T')[0];
+  const records = await db.all(
+    `SELECT a.*, u.username as attendee_username
+     FROM attendance a
+     JOIN users u ON a.user_id = u.id
+     WHERE a.date = ?
+     ORDER BY a.timestamp DESC`,
+    [today]
+  );
+  res.json(records || []);
+});
+
+app.get('/api/attendance/date/:date', requireAdminOrCreator, async (req, res) => {
+  const date = req.params.date;
+  const records = await db.all(
+    `SELECT a.*, u.username as attendee_username
+     FROM attendance a
+     JOIN users u ON a.user_id = u.id
+     WHERE a.date = ?
+     ORDER BY a.timestamp DESC`,
+    [date]
+  );
+  res.json(records || []);
+});
+
+app.get('/api/attendance/stats', requireAdminOrCreator, async (req, res) => {
+  const stats = await db.get(
+    `SELECT COUNT(DISTINCT user_id) as unique_members, COUNT(*) as total_confirmations
+     FROM attendance
+     WHERE date = ?`,
+    [new Date().toISOString().split('T')[0]]
+  );
+  res.json(stats);
+});
+
 
 // Private Messages endpoints
 app.get('/api/messages/:userId', requireAuth, async (req, res) => {

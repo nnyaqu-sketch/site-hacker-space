@@ -134,6 +134,68 @@ async function setupUserManagement() {
   });
 }
 
+async function setupAttendance() {
+  const selectEl = document.getElementById('attendance-member-select');
+  const confirmBtn = document.getElementById('attendance-confirm-btn');
+  const feedback = document.getElementById('attendance-feedback');
+  
+  // Load members
+  try {
+    const res = await fetch(apiPath('/api/users'));
+    if (res.ok) {
+      const users = await res.json();
+      selectEl.innerHTML = '<option value="">-- Choisir un membre --</option>';
+      users.sort((a, b) => a.username.localeCompare(b.username)).forEach(user => {
+        const opt = document.createElement('option');
+        opt.value = user.id;
+        opt.textContent = user.username;
+        selectEl.appendChild(opt);
+      });
+    }
+  } catch (err) {
+    console.error('Failed to load members for attendance:', err);
+  }
+  
+  // Confirm attendance
+  confirmBtn.addEventListener('click', async () => {
+    const userId = parseInt(selectEl.value);
+    if (!userId) {
+      feedback.className = 'error';
+      feedback.textContent = 'Veuillez sélectionner un membre';
+      feedback.style.display = 'block';
+      return;
+    }
+    
+    try {
+      const res = await fetch(apiPath('/api/attendance/mark'), {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ userId })
+      });
+      
+      if (res.ok) {
+        feedback.className = 'success';
+        feedback.textContent = '✓ Présence confirmée!';
+        selectEl.value = '';
+        feedback.style.display = 'block';
+        setTimeout(() => {
+          feedback.style.display = 'none';
+        }, 2000);
+      } else {
+        const data = await res.json();
+        feedback.className = 'error';
+        feedback.textContent = '✗ ' + (data.error || 'Erreur');
+        feedback.style.display = 'block';
+      }
+    } catch (err) {
+      console.error('Error confirming attendance:', err);
+      feedback.className = 'error';
+      feedback.textContent = '✗ Erreur de connexion';
+      feedback.style.display = 'block';
+    }
+  });
+}
+
 // Check admin access and initialize
 document.addEventListener('DOMContentLoaded', async () => {
   const auth = await checkAuth();
@@ -146,6 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupCodeGeneration();
   setupChatPurge();
   setupUserManagement();
+  setupAttendance();
   
   // Setup club open notification button
   const btn = document.getElementById('club-open-btn');

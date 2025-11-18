@@ -21,6 +21,7 @@
                 <a href="/checklist.html" class="nav-btn">Listes</a>
                 <a href="/lounge.html" class="nav-btn">Salon</a>
                 <a href="/messages.html" class="nav-btn">Messages</a>
+                <a href="/attendance.html" class="nav-btn">Présence</a>
                 <a href="/profile.html" class="nav-btn">Profil</a>
                 <a href="/admin.html" class="nav-btn admin-only active">Admin</a>
                 <a href="/creator.html" class="nav-btn creator-only">Créateur</a>
@@ -156,6 +157,68 @@
                                 <i data-lucide="lock" class="btn-icon"></i>
                                 Réinitialiser
                             </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Attendance Management Card -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="check-circle" class="header-icon"></i>
+                            <h2>Gestion de la Présence</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i data-lucide="user-check" class="label-icon"></i>
+                                Confirmer la présence d'un membre
+                            </label>
+                            <select id="attendance-member-select" class="form-select">
+                                <option value="">-- Choisir un membre --</option>
+                            </select>
+                        </div>
+                        <button id="attendance-confirm-btn" class="btn-secondary full-width">
+                            <i data-lucide="check" class="btn-icon"></i>
+                            Confirmer la Présence
+                        </button>
+                        <div id="attendance-feedback" class="feedback" style="display: none;"></div>
+                    </div>
+                </section>
+
+                <!-- Attendance Management Card -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <div class="header-title">
+                            <i data-lucide="check-circle" class="header-icon"></i>
+                            <h2>Confirmation de Présence</h2>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-section">
+                            <label class="form-label">
+                                <i data-lucide="user-plus" class="label-icon"></i>
+                                Sélectionner un membre
+                            </label>
+                            <select id="attendance-member-select" class="form-select">
+                                <option value="">-- Choisir un membre --</option>
+                            </select>
+                        </div>
+                        <button id="attendance-confirm-btn" class="btn-secondary full-width">
+                            <i data-lucide="check" class="btn-icon"></i>
+                            Confirmer la Présence
+                        </button>
+                        <div id="attendance-feedback" class="feedback" style="display: none;"></div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                            <p style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; font-weight: 600;">
+                                <i data-lucide="info" class="label-icon"></i>
+                                Page complète
+                            </p>
+                            <a href="/attendance.html" class="btn-secondary" style="text-decoration: none;">
+                                <i data-lucide="arrow-right" class="btn-icon"></i>
+                                Aller à la gestion de présence
+                            </a>
                         </div>
                     </div>
                 </section>
